@@ -38,7 +38,22 @@ class MinimaxSearchPlayer(Player):
                     value = (1 if winner == self.player else -1)
             else:
                 # TODO
-                pass
+                flag = self.player == s.get_current_player()
+                value = -inf if flag else inf  # MAX node / MIN node
+                for act_temp in s.get_all_actions():
+                    state_copy = deepcopy(s)
+                    if flag:     # MAX node
+                        state_copy.perform_action(act_temp) 
+                        temp_value, _ = minimax_search(state_copy)
+                        if temp_value > value:
+                            value = temp_value
+                            action = act_temp
+                    else:        # MIN node
+                        state_copy.perform_action(act_temp) 
+                        temp_value, _ = minimax_search(state_copy)
+                        if temp_value < value: 
+                            value = temp_value
+                            # action = act_temp
             return value, action
 
         return minimax_search(state)[1]
@@ -79,7 +94,28 @@ class AlphaBetaSearchPlayer(Player):
                     value = (1 if winner == self.player else -1)
             else:
                 # TODO
-                pass
+                flag =  self.player == s.get_current_player()
+                value = -inf if flag else inf  # MAX node / MIN node
+                for act_temp in s.get_all_actions():
+                    state_copy = deepcopy(s)
+                    if flag:     # MAX node
+                        state_copy.perform_action(act_temp) 
+                        temp_value, _ = alpha_beta_search(state_copy, alpha, beta)
+                        if temp_value > value:
+                            value = temp_value
+                            action = act_temp
+                        if value >= beta:
+                            return value, action
+                        alpha = max(alpha, value)
+                    else:        # MIN node
+                        state_copy.perform_action(act_temp) 
+                        temp_value, _ = alpha_beta_search(state_copy, alpha, beta)
+                        if temp_value < value: 
+                            value = temp_value
+                            # action = act_temp
+                        if value <= alpha:
+                            return value, action
+                        beta = min(beta, value)
 
             return value, action
 
