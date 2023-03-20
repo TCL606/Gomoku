@@ -174,9 +174,33 @@ class CuttingOffAlphaBetaSearchPlayer(Player):
                     value = 0
                 else:
                     value = (1 if winner == self.player else -1)
+            elif d == 0:
+                value = self.evaluation_func(s)
             else:
                 # TODO
-                pass
+                flag =  self.player == s.get_current_player()
+                value = -inf if flag else inf  # MAX node / MIN node
+                for act_temp in s.get_all_actions():
+                    state_copy = deepcopy(s)
+                    if flag:     # MAX node
+                        state_copy.perform_action(act_temp) 
+                        temp_value, _ = cutting_off_alpha_beta_search(state_copy, d, alpha, beta)
+                        if temp_value > value:
+                            value = temp_value
+                            action = act_temp
+                        if value >= beta:
+                            return value, action
+                        alpha = max(alpha, value)
+                    else:        # MIN node
+                        state_copy.perform_action(act_temp) 
+                        temp_value, _ = cutting_off_alpha_beta_search(state_copy, d - 1, alpha, beta)
+                        if temp_value < value: 
+                            value = temp_value
+                            # action = act_temp
+                        if value <= alpha:
+                            return value, action
+                        beta = min(beta, value)
+
             return value, action
 
         return cutting_off_alpha_beta_search(state, self.max_depth, -inf, inf)[1]
