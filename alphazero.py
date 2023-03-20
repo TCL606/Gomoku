@@ -18,7 +18,12 @@ class AlphaZero(MCTS):
 
     def get_leaf_value(self, state: State):
         # TODO
-        pass
+        end, winner = state.game_end()
+        if end:
+            return 0 if winner == -1 else -1  # the next move player's value
+        else:
+            return self.evaluation_func(state)
+
 
 
 class AlphaZeroPlayer(Player):

@@ -32,7 +32,7 @@ class TreeNode(object):
             next_state: the state corresponding to the child.
         """
         # TODO
-        pass
+        self.children[action] = TreeNode(self, next_state)
 
     def get_ucb(self, c):
         """Calculate and return the ucb value for this node in the parent's perspective.
@@ -44,7 +44,7 @@ class TreeNode(object):
             c: the trade-off hyperparameter.
         """
         # TODO
-        pass
+        return -self.U / self.n_visits + c * np.sqrt(np.log(self.parent.n_visits) / self.n_visits)
 
     def select(self, c):
         """Select action among children that gives maximum UCB value.
@@ -55,7 +55,7 @@ class TreeNode(object):
         Return: A tuple of (action, next_node)
         """
         # TODO
-        pass
+        return max(self.children.items(), key=lambda act_node: act_node[1].get_ucb(c))
 
     def update(self, leaf_value):
         """
@@ -65,7 +65,8 @@ class TreeNode(object):
             leaf_value: the value of subtree evaluation from the current player's perspective.
         """
         # TODO
-        pass
+        self.U = self.U + leaf_value
+        self.n_visits += 1
 
     def update_recursive(self, leaf_value):
         """Like a call to update(), but applied recursively for all ancestors.
@@ -125,7 +126,11 @@ class MCTS(object):
         Note: the value should be under the perspective of state.get_current_player()
         """
         # TODO
-        pass
+        current_player = state.get_current_player()
+        while not state.game_end()[0]:
+            state.perform_action(random.choice(state.get_all_actions()))
+        winner = state.game_end()[1]
+        return 1 if winner == current_player else 0 if winner < 0 else -1  
 
 
 class MCTSPlayer(Player):
