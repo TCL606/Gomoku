@@ -71,7 +71,7 @@ class GUIGame(Game):
                 current_player = self.board.get_current_player()
                 player_in_turn = players[current_player]
                 move = player_in_turn.get_action(self.board)
-                print(self.board.move_to_location(move))
+                # print(self.board.move_to_location(move))
                 self.board.perform_action(move)
                 if is_shown:
                     self.graphic(self.board, player1.player, player2.player)
@@ -79,9 +79,9 @@ class GUIGame(Game):
                 if end:
                     if is_shown:
                         if winner != -1:
-                            messagebox.showinfo("Game end. Winner is", players[winner])
+                            messagebox.showinfo("info", f"Game end. Winner is {players[winner]}")
                         else:
-                            messagebox.showinfo("Game end. Tie")
+                            messagebox.showinfo("info", "Game end. Tie")
                     self.root.quit()
                     return winner
                 
