@@ -9,7 +9,7 @@ class GUIGame(Game):
     def __init__(self, board: Board, **kwargs):
         super().__init__(board, **kwargs)
         self.root = Tk()
-        self.root.title('GoBang')
+        self.root.title('Gomoku')
         self.C = board.width
         self.R = board.height
         self.cell_size = 30
