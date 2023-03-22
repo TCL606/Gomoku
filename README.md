@@ -1,6 +1,6 @@
 # Gomoku
 
-Gomoku, also called as Five in a Row, is an interesting strategy board game. This repository implements the Gomoku game and also provides a good template for development.
+Gomoku, also called as Five in a Row, is an interesting strategy board game. This repository implements the Gomoku game and also provides a good framework for development.
 
 ![board](img/board.png)
 
