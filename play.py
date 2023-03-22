@@ -5,6 +5,7 @@ from minimax import MinimaxSearchPlayer, AlphaBetaSearchPlayer, CuttingOffAlphaB
 from mcts import MCTSPlayer
 from alphazero import AlphaZeroPlayer
 from evaluation import get_evaluation_func
+from guigame import *
 
 
 def get_player(player_name, args):
@@ -22,6 +23,8 @@ def get_player(player_name, args):
         return MCTSPlayer(args.c, args.n_playout)
     elif player_name == "AlphaZeroPlayer":
         return AlphaZeroPlayer(get_evaluation_func(args.evaluation_func), args.c, args.n_playout)
+    elif player_name == "GUIHuman":
+        return GUIHuman(args.game)
     else:
         raise KeyError(player_name)
 
@@ -31,7 +34,8 @@ def run(args):
     width, height = args.width, args.height
     try:
         board = Board(width=width, height=height, n_in_row=n)
-        game = Game(board)
+        game = GUIGame(board)
+        args.game = game
         player_1 = get_player(args.player_1, args)
         player_2 = get_player(args.player_2, args)
         # set start_player=0 for human first

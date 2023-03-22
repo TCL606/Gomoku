@@ -20,6 +20,9 @@ class State(object):
 
     def get_all_actions(self) -> List:
         raise NotImplementedError
+    
+    def get_last_move(self) -> int:
+        raise NotImplementedError
 
     def perform_action(self, action):
         raise NotImplementedError
@@ -52,8 +55,8 @@ class Board(State):
 
     def __init__(self, **kwargs):
         super().__init__()
-        self._width = int(kwargs.get('width', 8))
-        self._height = int(kwargs.get('height', 8))
+        self.width = int(kwargs.get('width', 8))
+        self.height = int(kwargs.get('height', 8))
         # board states stored as a dict,
         # key: move as location on the board,
         # value: player as pieces type
@@ -63,8 +66,8 @@ class Board(State):
         self._availables, self._last_move = None, None
 
     def move_to_location(self, move):
-        h = move // self._width
-        w = move % self._width
+        h = move // self.width
+        w = move % self.width
         return [h, w]
 
     def location_to_move(self, location):
@@ -72,23 +75,26 @@ class Board(State):
             return -1
         h = location[0]
         w = location[1]
-        move = h * self._width + w
-        if move not in range(self._width * self._height):
+        move = h * self.width + w
+        if move not in range(self.width * self.height):
             return -1
         return move
 
     def reset(self, start_player=0):
-        if self._width < self._n_in_row or self._height < self._n_in_row:
+        if self.width < self._n_in_row or self.height < self._n_in_row:
             raise Exception('board width and height can not be '
                             'less than {}'.format(self._n_in_row))
         self._current_player = self._players[start_player]  # start player
         # keep available moves in a list
-        self._availables = list(range(self._width * self._height))
+        self._availables = list(range(self.width * self.height))
         self._states = {}
         self._last_move = -1
 
     def get_current_player(self):
         return self._current_player
+    
+    def get_last_move(self):
+        return self._last_move
 
     def get_all_actions(self):
         return self._availables
@@ -104,8 +110,8 @@ class Board(State):
         return self
 
     def has_a_winner(self):
-        width = self._width
-        height = self._height
+        width = self.width
+        height = self.height
         states = self._states
         n = self._n_in_row
 
@@ -179,12 +185,12 @@ class Board(State):
             ],
         }
 
-        state = np.zeros((self._width, self._height))
+        state = np.zeros((self.width, self.height))
         if len(self._states) > 0:
             moves, players = np.array(list(zip(*self._states.items())))
-            state[moves // self._width, moves % self._height] = players
+            state[moves // self.width, moves % self.height] = players
 
-        all_state = -np.ones((4, 6, self._width, self._height))
+        all_state = -np.ones((4, 6, self.width, self.height))
         all_state[0, 0] = state
         all_state[1, 0] = state
         all_state[2, 0] = state
@@ -199,7 +205,7 @@ class Board(State):
 
         for player in self._players:
             info[player] = {}
-            occupied = np.zeros((4, 6, self._width, self._height), dtype=bool)
+            occupied = np.zeros((4, 6, self.width, self.height), dtype=bool)
             for shape_name, shape_list in info_dict.items():
                 info[player][shape_name] = 0
                 for shape in shape_list:
@@ -222,13 +228,13 @@ class Board(State):
                                     occupied[1, i, w, h - i] = 1
                                 if d == 2 and w >= i and h >= i:
                                     occupied[2, i, w - i, h - i] = 1
-                                if d == 3 and w >= i and h + i < self._height:
+                                if d == 3 and w >= i and h + i < self.height:
                                     occupied[3, i, w - i, h + i] = 1
-            max_distance = max([0.] + [abs(location // self._width - (self._height - 1) / 2)
-                                       + abs(location % self._width - (self._width - 1) / 2)
+            max_distance = max([0.] + [abs(location // self.width - (self.height - 1) / 2)
+                                       + abs(location % self.width - (self.width - 1) / 2)
                                        for location in self._states.keys() if
                                        self._states.get(location, 0) == player])
-            max_distance /= ((self._height - 1) / 2 + (self._width - 1) / 2)
+            max_distance /= ((self.height - 1) / 2 + (self.width - 1) / 2)
             info[player]["max_distance"] = max_distance
 
         return info
@@ -264,8 +270,8 @@ class Game(object):
 
     def graphic(self, board: Board, player1, player2):
         """Draw the board and show game info"""
-        width = board._width
-        height = board._height
+        width = board.width
+        height = board.height
 
         print("Player", player1, "with X".rjust(3))
         print("Player", player2, "with O".rjust(3))
