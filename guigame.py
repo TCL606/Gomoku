@@ -107,7 +107,8 @@ class GUIGame(Game):
 
 class GUIHuman(Player):
 
-    def __init__(self, game: GUIGame):
+    def __init__(self, game: Game):
+        assert isinstance(game, GUIGame)
         super().__init__()
         self.cell_size = game.cell_size
         self.R = game.R
