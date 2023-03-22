@@ -18,16 +18,14 @@ def distance_evaluation_func(state):
             score += info_p["max_distance"]
     return score
 
-
-live_four_score = 0.5
-four_score = 0.05
-live_three_score = 0.04
-three_score = 0.025
-live_two_score = 0.01
-max_distance_score = 0.01
-
 def detailed_evaluation_func(state):
     # TODO
+    live_four_score = 0.5
+    four_score = 0.05
+    live_three_score = 0.04
+    three_score = 0.025
+    live_two_score = 0.01
+    max_distance_score = 0.01
     player = state.get_current_player()
     info = state.get_info()
     score = 0.0

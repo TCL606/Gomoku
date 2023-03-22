@@ -2,7 +2,8 @@ import random
 
 import copy
 import numpy as np
-from game import State, Player
+from state import State
+from .player import Player
 
 from copy import deepcopy
 

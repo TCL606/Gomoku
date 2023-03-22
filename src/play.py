@@ -1,11 +1,8 @@
 from __future__ import print_function
 
-from game import Board, DummyPlayer, Human, Game
-from minimax import MinimaxSearchPlayer, AlphaBetaSearchPlayer, CuttingOffAlphaBetaSearchPlayer
-from mcts import MCTSPlayer
-from alphazero import AlphaZeroPlayer
-from evaluation import get_evaluation_func
-from guigame import *
+from game import *
+from player import *
+from utils.evaluation import get_evaluation_func
 
 
 def get_player(player_name, args):
@@ -17,14 +14,16 @@ def get_player(player_name, args):
         return MinimaxSearchPlayer()
     elif player_name == "AlphaBetaSearchPlayer":
         return AlphaBetaSearchPlayer()
-    elif player_name == "CuttingOffAlphaBetaSearchPlayer":
-        return CuttingOffAlphaBetaSearchPlayer(args.max_depth, get_evaluation_func(args.evaluation_func))
+    elif player_name == "CuttingOffSearchPlayer":
+        return CuttingOffSearchPlayer(args.max_depth, get_evaluation_func(args.evaluation_func))
     elif player_name == "MCTSPlayer":
         return MCTSPlayer(args.c, args.n_playout)
     elif player_name == "AlphaZeroPlayer":
         return AlphaZeroPlayer(get_evaluation_func(args.evaluation_func), args.c, args.n_playout)
     elif player_name == "GUIHuman":
-        return GUIHuman(args.game)
+        assert hasattr(args, "game")
+        assert isinstance(args.game, GUIGame)
+        return GUIHuman(args.game.root, args.game.cell_size, args.game.R, args.game.C, args.game.board_shift_x, args.game.board_shift_y)
     else:
         raise KeyError(player_name)
 
@@ -34,7 +33,7 @@ def run(args):
     width, height = args.width, args.height
     try:
         board = Board(width=width, height=height, n_in_row=n)
-        game = GUIGame(board) if args.gui else Game(board)
+        game = GUIGame(board) if args.gui else CLIGame(board)
         args.game = game
         player_1 = get_player(args.player_1, args)
         player_2 = get_player(args.player_2, args)

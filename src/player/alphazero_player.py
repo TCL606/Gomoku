@@ -1,6 +1,7 @@
 import copy
-from game import State, Player
-from mcts import MCTS
+from state import State
+from .player import Player
+from .mcts_player import MCTS
 
 
 class AlphaZero(MCTS):

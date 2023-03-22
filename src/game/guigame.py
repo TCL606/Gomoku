@@ -1,10 +1,9 @@
 from tkinter import *
 from tkinter import messagebox
-from game import Game, Board, Player
-from minimax import *
+from .game import Game
+from player import Player
+from state import Board 
 import threading
-import asyncio
-import time
 
 class GUIGame(Game):
     def __init__(self, board: Board, **kwargs):
@@ -104,60 +103,3 @@ class GUIGame(Game):
                 return int(xa * self.cell_size)
             
         return correct(x), correct(y)
-
-class GUIHuman(Player):
-
-    def __init__(self, game: Game):
-        assert isinstance(game, GUIGame)
-        super().__init__()
-        self.cell_size = game.cell_size
-        self.R = game.R
-        self.C = game.C
-        self.board_shift_x = game.board_shift_x
-        self.board_shift_y = game.board_shift_y
-        self.root = game.root
-        self.event_sema = threading.BoundedSemaphore(1)
-        self.event_sema.acquire()
-
-    def process_event(self, event):
-        self.event = event
-        self.event_sema.release()
-
-    def get_action(self, state: Board):
-        try:
-            self.root.bind("<ButtonPress-1>", self.process_event)
-            self.event_sema.acquire()
-            x = self.event.x - self.board_shift_x * self.cell_size
-            y = self.event.y - self.board_shift_y * self.cell_size
-            if x < 0:
-                x = 0
-            if x > (self.R - 1) * self.cell_size:
-                x = (self.R - 1) * self.cell_size
-            if y < 0:
-                y = 0
-            if y > (self.C - 1) * self.cell_size:
-                y = (self.C - 1) * self.cell_size
-            xa = int(x / self.cell_size)
-            xb = x % self.cell_size
-            ya = int(y / self.cell_size)
-            yb = y % self.cell_size
-            if xb >= self.cell_size / 2:
-                cor_x = xa + 1
-            else:
-                cor_x = xa
-            if yb >= self.cell_size / 2:
-                cor_y = ya + 1
-            else:
-                cor_y = ya
-            move = state.location_to_move([cor_x, cor_y])
-            
-        except Exception as e:
-            move = -1
-
-        finally:
-            self.root.unbind("<ButtonPress-1>")
-
-        if move == -1 or move not in state.get_all_actions():
-            print("invalid move: ", move)
-            move = self.get_action(state)
-        return move
