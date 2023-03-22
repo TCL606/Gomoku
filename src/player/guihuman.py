@@ -1,15 +1,16 @@
 from .player import Player
 import threading
 from state import Board
+from tkinter import Tk
 
 class GUIHuman(Player):
 
-    def __init__(self, root, cell_size=30, R=10, C=10, board_shift_x=0.5, board_shift_y=0.5):
+    def __init__(self, root: Tk, R=10, C=10, cell_size=30, board_shift_x=0.5, board_shift_y=0.5):
         super().__init__()
         self.root = root
-        self.cell_size = cell_size
         self.R = R
         self.C = C
+        self.cell_size = cell_size
         self.board_shift_x = board_shift_x
         self.board_shift_y = board_shift_y
         self.event_sema = threading.BoundedSemaphore(1)

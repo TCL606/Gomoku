@@ -23,7 +23,7 @@ def get_player(player_name, args):
     elif player_name == "GUIHuman":
         assert hasattr(args, "game")
         assert isinstance(args.game, GUIGame)
-        return GUIHuman(args.game.root, args.game.cell_size, args.game.R, args.game.C, args.game.board_shift_x, args.game.board_shift_y)
+        return GUIHuman(args.game.root, args.game.R, args.game.C, args.game.cell_size, args.game.board_shift_x, args.game.board_shift_y)
     else:
         raise KeyError(player_name)
 
