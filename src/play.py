@@ -33,7 +33,7 @@ def run(args):
     width, height = args.width, args.height
     try:
         board = Board(width=width, height=height, n_in_row=n)
-        game = GUIGame(board) if args.gui else CLIGame(board)
+        game = GUIGame(board, args.wav) if args.gui else CLIGame(board)
         args.game = game
         player_1 = get_player(args.player_1, args)
         player_2 = get_player(args.player_2, args)
@@ -57,6 +57,7 @@ if __name__ == '__main__':
     parser.add_argument("--evaluation_func", type=str, default="dummy_evaluation_func", help="Evaluation function (CuttingOffAlphaBetaSearch/AlphaZero only).")
     parser.add_argument("--c", type=float, default=1, help="Trade-off hyperparameter (MCTS/AlphaZero only).")
     parser.add_argument("--n_playout", type=int, default=5000, help="Number of playouts (MCTS/AlphaZero only).")
+    parser.add_argument("--wav", type=str, default=None, help="wav file of playing chess")
     args = parser.parse_args()
 
     run(args)

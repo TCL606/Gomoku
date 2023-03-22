@@ -5,8 +5,12 @@ from player import Player
 from state import Board 
 import threading
 
+from os import environ
+environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
+import pygame
+
 class GUIGame(Game):
-    def __init__(self, board: Board, **kwargs):
+    def __init__(self, board: Board, wav_file: str, **kwargs):
         super().__init__(board, **kwargs)
         self.root = Tk()
         self.root.title('Gomoku')
@@ -20,7 +24,10 @@ class GUIGame(Game):
         self.color_now = ("#FFFFFF", "#000000")
         self.board_shift_x = 0.5
         self.board_shift_y = 0.5
-
+        self.wav_file = wav_file
+        pygame.mixer.init()
+        pygame.mixer.music.load(wav_file)  
+        pygame.mixer.music.set_volume(0.5) 
         self.draw_board(self.C, self.R)
 
 
@@ -46,6 +53,8 @@ class GUIGame(Game):
         x1 = int(x0 + self.cell_size)
         y1 = int(y0 + self.cell_size)
         self.cv.create_oval(x0, y0, x1, y1, fill=color)
+        pygame.mixer.music.play()
+
 
     def graphic(self, board: Board, player1, player2):
         if board.get_last_move() != -1:
