@@ -2,6 +2,8 @@
 
 Gomoku, also called as Five in a Row, is an interesting strategy board game. This repository implements the Gomoku game and also provides a good template for development.
 
+![board](img/board.png)
+
 ## For Players
 For those who only want to play the Gomoku game, you can run the `src/play.py` file to start a new game. We support any size of board, which can be specified by the parameters `width` and `height`. We also support many differnt AI players, which are implemented by different search algorithms.
 
