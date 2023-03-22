@@ -21,6 +21,9 @@ class State(object):
 
     def perform_action(self, action):
         raise NotImplementedError
+    
+    def cancel_action(self):
+        raise NotImplementedError
 
     def game_end(self) -> Tuple[bool, int]:
         raise NotImplementedError

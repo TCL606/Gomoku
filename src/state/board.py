@@ -40,6 +40,7 @@ class Board(State):
         self._availables = list(range(self.width * self.height))
         self._states = {}
         self._last_move = -1
+        self.can_cancel = False
 
     def get_current_player(self):
         return self._current_player
@@ -58,6 +59,18 @@ class Board(State):
             else self._players[1]
         )
         self._last_move = action
+        self.can_cancel = True
+        return self
+
+    def cancel_action(self):
+        if self.can_cancel:
+            self._current_player = (
+                self._players[0] if self._current_player == self._players[1]
+                else self._players[1]
+            )
+            self._availables.append(self._last_move)
+            del self._states[self._last_move]
+            self.can_cancel = False
         return self
 
     def has_a_winner(self):

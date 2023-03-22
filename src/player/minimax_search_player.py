@@ -40,17 +40,19 @@ class MinimaxSearchPlayer(Player):
                 # TODO
                 flag = self.player == s.get_current_player()
                 value = -inf if flag else inf  # MAX node / MIN node
+                state_copy = deepcopy(s)
                 for act_temp in s.get_all_actions():
-                    state_copy = deepcopy(s)
                     if flag:     # MAX node
                         state_copy.perform_action(act_temp) 
                         temp_value, _ = minimax_search(state_copy)
+                        state_copy.cancel_action()
                         if temp_value > value:
                             value = temp_value
                             action = act_temp
                     else:        # MIN node
                         state_copy.perform_action(act_temp) 
                         temp_value, _ = minimax_search(state_copy)
+                        state_copy.cancel_action()
                         if temp_value < value: 
                             value = temp_value
                             # action = act_temp

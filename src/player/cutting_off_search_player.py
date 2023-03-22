@@ -63,11 +63,12 @@ class CuttingOffSearchPlayer(Player):
                 # TODO
                 flag =  self.player == s.get_current_player()
                 value = -inf if flag else inf  # MAX node / MIN node
+                state_copy = deepcopy(s)
                 for act_temp in s.get_all_actions():
-                    state_copy = deepcopy(s)
                     if flag:     # MAX node
                         state_copy.perform_action(act_temp) 
                         temp_value, _ = cutting_off_alpha_beta_search(state_copy, d, alpha, beta)
+                        state_copy.cancel_action()
                         if temp_value > value:
                             value = temp_value
                             action = act_temp
@@ -77,6 +78,7 @@ class CuttingOffSearchPlayer(Player):
                     else:        # MIN node
                         state_copy.perform_action(act_temp) 
                         temp_value, _ = cutting_off_alpha_beta_search(state_copy, d - 1, alpha, beta)
+                        state_copy.cancel_action()
                         if temp_value < value: 
                             value = temp_value
                             # action = act_temp
