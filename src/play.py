@@ -57,7 +57,7 @@ if __name__ == '__main__':
     parser.add_argument("--evaluation_func", type=str, default="dummy_evaluation_func", help="Evaluation function (CuttingOffAlphaBetaSearch/AlphaZero only).")
     parser.add_argument("--c", type=float, default=1, help="Trade-off hyperparameter (MCTS/AlphaZero only).")
     parser.add_argument("--n_playout", type=int, default=5000, help="Number of playouts (MCTS/AlphaZero only).")
-    parser.add_argument("--wav", type=str, default=None, help="wav file of playing chess")
+    parser.add_argument("--wav", type=str, default="./resource/chess_sound.wav", help="wav file of playing chess")
     args = parser.parse_args()
 
     run(args)
